@@ -1,6 +1,5 @@
-// File: frontend/auth.js
-
-const API_URL = 'http://localhost:8080/api/auth';
+// Use a relative URL so it works on the deployed site
+const API_URL = '/api/auth';
 
 const loginForm = document.getElementById('login-form');
 const registerForm = document.getElementById('register-form');
@@ -11,7 +10,7 @@ if (loginForm) {
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
         try {
-            const res = await fetch(`${API_URL}/login`, {
+            const res = await fetch(API_URL + '/login', { // updated here
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password })
@@ -35,7 +34,7 @@ if (registerForm) {
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
         try {
-            const res = await fetch(`${API_URL}/register`, {
+            const res = await fetch(API_URL + '/register', { // updated here
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password })

@@ -1,16 +1,13 @@
-// File: frontend/script.js (Complete Replacement)
-
-const API = "http://localhost:8080/api";
+// Use a relative URL so it works on the deployed site
+const API = "/api";
 const token = localStorage.getItem('token');
 
 // --- Authentication Check ---
-// If no token, redirect to login page immediately
-if (!token) {
+if (!token && window.location.pathname !== '/login.html' && window.location.pathname !== '/register.html') {
     window.location.href = 'login.html';
 }
 
 // --- General API Fetch Function ---
-// This function will automatically add the auth token to every request
 async function fetchWithAuth(url, options = {}) {
     const headers = {
         'Content-Type': 'application/json',
@@ -19,7 +16,6 @@ async function fetchWithAuth(url, options = {}) {
     };
     const response = await fetch(url, { ...options, headers });
 
-    // If token is invalid or expired, redirect to login
     if (response.status === 401) {
         localStorage.removeItem('token');
         window.location.href = 'login.html';
@@ -29,10 +25,12 @@ async function fetchWithAuth(url, options = {}) {
 
 // --- Page Setup ---
 window.onload = () => {
-    loadLaborers();
-    loadLatestNote();
+    // Only run main app logic if we are on the index page
+    if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/') {
+        loadLaborers();
+        loadLatestNote();
+    }
     
-    // Logout Button
     const logoutBtn = document.getElementById('logout-btn');
     if(logoutBtn) {
         logoutBtn.addEventListener('click', () => {
@@ -152,7 +150,7 @@ async function generateReport() {
   }
   const table = document.createElement('table');
   table.className = 'table table-bordered table-striped mt-2';
-  table.innerHTML = `<tr class="table-dark"><th>Laborer Name</th><th>Days Worked</th><th>Total Salary (₹)</th></tr>`;
+  table.innerHTML = `<thead class="table-dark"><tr><th>Laborer Name</th><th>Days Worked</th><th>Total Salary (₹)</th></tr></thead>`;
   const tbody = table.createTBody();
   data.forEach(item => {
     const row = tbody.insertRow();
