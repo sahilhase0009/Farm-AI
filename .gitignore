@@ -1,0 +1,10 @@
+# Dependency directories
+node_modules/
+
+# Environment variables file
+# This file contains secrets and should NEVER be committed.
+.env
+
+# OS-specific files
+.DS_Store
+Thumbs.db

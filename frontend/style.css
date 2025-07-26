@@ -1,0 +1,32 @@
+body {
+  background: #f8f9fa;
+}
+
+.btn-purple {
+  background-color: #6f42c1;
+  color: white;
+}
+
+#laborer-list {
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+/* Add these styles to the bottom of your style.css file */
+
+.auth-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #e9ecef;
+}
+
+.auth-container {
+    background: white;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 400px;
+}
