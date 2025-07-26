@@ -1,14 +1,11 @@
-// File: backend/server.js (Complete Replacement)
-
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const path = require('path');
+const path = require('path'); // Required for serving files
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 const authMiddleware = require('./middleware/authMiddleware');
-
 const Laborer = require('./models/Laborer');
 const Attendance = require('./models/Attendance');
 const Notes = require('./models/Notes');
@@ -22,20 +19,10 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 mongoose.connect(process.env.MONGO_URI).then(() => console.log("MongoDB Connected !!"));
 
-// --- Public Auth Routes ---
+// --- API Routes ---
 app.use('/api/auth', require('./routes/auth'));
 
-// --- Serve Frontend ---
-// This will serve your HTML, CSS, and JS files from the 'frontend' folder
-app.use(express.static(path.join(__dirname, '../frontend')));
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend', 'login.html'));
-});
-
-
-// --- Protected API Routes (All routes below require a valid token) ---
-
-// Laborer Routes
+// Protected Laborer Routes
 app.get('/api/laborers', authMiddleware, async (req, res) => {
   res.json(await Laborer.find({ userId: req.user.id }));
 });
@@ -54,7 +41,7 @@ app.delete('/api/laborers/:id', authMiddleware, async (req, res) => {
     res.json({ msg: 'Laborer deleted' });
 });
 
-// Attendance Route
+// Protected Attendance Route
 app.post('/api/attendance', authMiddleware, async (req, res) => {
   const records = req.body.ids.map(id => ({
     laborerId: id,
@@ -65,7 +52,7 @@ app.post('/api/attendance', authMiddleware, async (req, res) => {
   res.json({ status: 'Saved' });
 });
 
-// Notes Routes
+// Protected Notes Routes
 app.post('/api/notes', authMiddleware, async (req, res) => {
     await Notes.findOneAndUpdate(
         { userId: req.user.id },
@@ -80,7 +67,7 @@ app.get('/api/notes/latest', authMiddleware, async (req, res) => {
     res.json(note || { content: '' });
 });
 
-// AI Analysis Route
+// Protected AI Analysis Route
 app.post('/api/ai/analyze', authMiddleware, async (req, res) => {
   const { note } = req.body;
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
@@ -90,7 +77,7 @@ app.post('/api/ai/analyze', authMiddleware, async (req, res) => {
   res.json({ response: response.text() });
 });
 
-// Salary Report Route
+// Protected Salary Report Route
 app.get('/api/salary', authMiddleware, async (req, res) => {
   const laborers = await Laborer.find({ userId: req.user.id });
   const report = [];
@@ -104,6 +91,19 @@ app.get('/api/salary', authMiddleware, async (req, res) => {
   }
   res.json(report);
 });
+
+
+// ✅ START: SERVE FRONTEND STATIC FILES
+// This new section will serve your website's files
+app.use(express.static(path.join(__dirname, '../frontend')));
+
+// For any route that is not an API route, send the main index.html file.
+// The script in index.html will handle redirecting to the login page if needed.
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend', 'index.html'));
+});
+// ✅ END: SERVE FRONTEND STATIC FILES
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
