@@ -2,56 +2,62 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Farm-AI Management System</title>
+  <!-- ✅ META TAG: This is essential for mobile responsiveness -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Farm Labor Management System</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
-<body class="p-4">
+<body class="p-3 p-md-4">
   <div class="container">
-    <button class="btn btn-secondary float-end" id="logout-btn">Logout</button>
-    <h2 class="text-center">🌾 Farm-AI Management System</h2>
-   
-    <p class="text-center text-muted">Now with ✨ a dedicated AI Farming Assistant.</p>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="h3 mb-0">🌾 Farm Labor Management</h2>
+        <button class="btn btn-secondary btn-sm" id="logout-btn">Logout</button>
+    </div>
+    <p class="text-center text-muted d-none d-md-block">Now with ✨ a dedicated AI Farming Assistant.</p>
 
     <div class="row mt-4">
+      <!-- ✅ GRID UPDATE: Added classes to make columns stack on mobile -->
       <!-- Laborer List -->
-      <div class="col-md-4">
+      <div class="col-lg-4 col-md-6 col-12 mb-4">
         <h5>Laborer List</h5>
         <ul class="list-group" id="laborer-list"></ul>
-        <button class="btn btn-primary btn-sm mt-2" onclick="addLaborer()">+ Add New</button>
+        <button class="btn btn-primary w-100 mt-2" onclick="addLaborer()">+ Add New</button>
       </div>
       <!-- Mark Attendance -->
-      <div class="col-md-4">
+      <div class="col-lg-4 col-md-6 col-12 mb-4">
         <h5>Mark Attendance</h5>
         <input type="date" class="form-control mb-2" id="att-date">
-        <div id="attendance-list"></div>
+        <div id="attendance-list" class="attendance-box"></div>
         <button class="btn btn-success w-100 mt-2" onclick="saveAttendance()">Save Attendance</button>
       </div>
 
       <!-- Crop Notes -->
-      <div class="col-md-4">
+      <div class="col-lg-4 col-md-12 col-12 mb-4">
         <h5>🌱 Crop Notes</h5>
         <textarea class="form-control" id="crop-notes" rows="5"></textarea>
         <button class="btn btn-info w-100 mt-2" onclick="saveNotes()">Save Notes</button>
       </div>
     </div>
 
-    <!-- AI Assistant -->
-    <div class="row mt-4">
-      <div class="col-md-6">
+    <!-- AI Assistant & Salary Reports -->
+    <div class="row mt-md-4">
+      <!-- AI Assistant -->
+      <div class="col-lg-6 col-12 mb-4">
         <h5>✨ AI Farming Assistant</h5>
-        <button class="btn btn-warning w-100 mt-2" onclick="analyzeNotes()">Analyze My Crop Notes</button>
+        <button class="btn btn-warning w-100" onclick="analyzeNotes()">Analyze My Crop Notes</button>
         <textarea id="ai-response" class="form-control mt-2" rows="5" readonly></textarea>
       </div>
 
       <!-- Salary Reports -->
-      <div class="col-md-6">
+      <div class="col-lg-6 col-12 mb-4">
         <h5>Salary Reports</h5>
         <select class="form-select" id="report-month">
           <option>July 2025</option>
+          <!-- You can add more months here dynamically if you wish -->
         </select>
         <button class="btn btn-purple w-100 mt-2" onclick="generateReport()">Generate Monthly Summary</button>
-        <div id="salary-summary" class="mt-2"></div>
+        <div id="salary-summary" class="mt-2 table-responsive"></div>
       </div>
     </div>
   </div>

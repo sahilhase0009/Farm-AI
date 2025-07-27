@@ -1,5 +1,6 @@
 body {
   background: #f8f9fa;
+  font-size: 16px; /* Set a base font size */
 }
 
 .btn-purple {
@@ -7,26 +8,39 @@ body {
   color: white;
 }
 
-#laborer-list {
+/* ✅ STYLE UPDATE: Make list boxes scrollable on mobile */
+#laborer-list, .attendance-box {
   max-height: 250px;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
 }
 
-/* Add these styles to the bottom of your style.css file */
-
+/* --- Auth Page Styles --- */
 .auth-body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     background-color: #e9ecef;
+    padding: 1rem;
 }
 
 .auth-container {
     background: white;
     padding: 2rem;
     border-radius: 0.5rem;
-    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     width: 100%;
-    max-width: 400px;
+    max-width: 420px;
+}
+
+/* ✅ MEDIA QUERY: For small screens (phones) */
+@media (max-width: 767.98px) {
+  h2.h3 {
+    font-size: 1.5rem; /* Make main title a bit smaller */
+  }
+
+  h5 {
+    font-size: 1.1rem; /* Adjust subheading sizes */
+  }
 }
