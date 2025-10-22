@@ -27,11 +27,15 @@ app.get('/api/laborers', authMiddleware, async (req, res) => {
   res.json(await Laborer.find({ userId: req.user.id }));
 });
 
+//to add
+
 app.post('/api/laborers', authMiddleware, async (req, res) => {
   const { name, dailyWage } = req.body;
   const laborer = await Laborer.create({ name, dailyWage, userId: req.user.id });
   res.status(201).json(laborer);
 });
+
+//to delete
 
 app.delete('/api/laborers/:id', authMiddleware, async (req, res) => {
     const laborer = await Laborer.findOne({ _id: req.params.id, userId: req.user.id });
@@ -67,14 +71,26 @@ app.get('/api/notes/latest', authMiddleware, async (req, res) => {
     res.json(note || { content: '' });
 });
 
+
 // Protected AI Analysis Route
 app.post('/api/ai/analyze', authMiddleware, async (req, res) => {
   const { note } = req.body;
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
+  
+  // CHANGE THIS LINE TO A STABLE, WIDELY AVAILABLE MODEL:
+  const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" }); 
+  // WAS: const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" }); 
+  
   const prompt = `Based on the following farm note, provide a short, practical, and actionable suggestion for a farmer. Note: "${note}"`;
-  const result = await model.generateContent(prompt);
-  const response = await result.response;
-  res.json({ response: response.text() });
+  
+  try {
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    res.json({ response: response.text() });
+  } catch (error) {
+     // Handle errors
+     console.error("Gemini API Error:", error.message);
+     res.status(500).json({ response: 'AI analysis failed. Check server logs.' });
+  }
 });
 
 // Protected Salary Report Route
